@@ -1,34 +1,118 @@
-# Thread-Flow-Scheduler: Multi-Threaded Task Processor
 
-## 📌 Project Overview
-[cite_start] Developed for the Operating Systems course at the **University of Khartoum**. [cite_start]This system simulates a multi-unit processing environment where tasks are read from a file, queued, and dispatched to specific worker threads (Units 0-4) based on a predefined itinerary[cite: 24, 68].
+---
 
-## 🏗 System Architecture
-The system consists of the following components implemented as concurrent threads:
-* [cite_start]**Receptor**: Reads tasks from an input file and adds them to the main Waiting Queue[cite: 36, 68].
-* [cite_start]**Dispatcher**: Manages task movement between the Waiting Queue and specific Unit Queues[cite: 69].
-* [cite_start]**Processing Units**: 5 threads that perform mathematical operations (+7, *2, ^5, -19, and Print)[cite: 70, 71].
+# 🚀 ThreadFlow-Scheduler: Multi-Threaded Task Processor
 
-## 🛠 Features
-- **Thread Synchronization**: Uses Mutexes and Condition Variables for thread-safe queue management.
-- [cite_start]**Modulo Arithmetic**: All operations are performed modulo $M=10,000$[cite: 73].
-- [cite_start]**Timing Logic**: Precise arrival tracking using `gettimeofday()`[cite: 36].
-- [cite_start]**Cooldown Simulation**: Each unit sleeps for 0.5s after task execution to simulate real-world processing[cite: 72].
+## 🎓 Context
+
+Developed for the **Operating Systems** course at the **University of Khartoum**. This project showcases advanced concurrency, thread synchronization, and real-time task scheduling.
+
+---
+
+## 📖 Project Overview
+
+This system simulates a high-performance multi-unit processing environment. Tasks are parsed from a file, entered into a global queue, and then navigated through a series of specialized worker threads (Units 0-4) based on a custom itinerary.
+
+## 🏗️ System Architecture
+
+The engine runs on three primary thread types:
+
+* 📥 **Receptor**: The gatekeeper. It reads tasks from the input file and introduces them to the **Waiting Queue**.
+
+
+* 🚦 **Dispatcher**: The traffic controller. It monitors the queue and routes tasks to their next required processing unit.
+
+
+* ⚙️ **Processing Units**: 5 specialized worker threads (0-4) that perform unique mathematical transformations or output tasks.
+
+
+
+---
+
+## 🛠️ Key Features
+
+* 🔒 **Thread Synchronization**: Robust use of **Mutexes** and **Condition Variables** to prevent race conditions in shared queues.
+* 🔢 **Modulo Arithmetic**: Secure computation using a constant  for all unit operations.
+
+
+* ⏱️ **Timing Logic**: High-precision task arrival tracking using `gettimeofday()`.
+
+
+* 💤 **Cooldown Simulation**: Units simulate real-world hardware constraints by sleeping for **0.5s** after each operation.
+
+
+
+---
+
+## 📂 Project Structure
+
+```bash
+ThreadFlow-OS/
+├── 📁 include/
+│   └── project.h       # 📜 Shared types & function headers
+├── 📁 src/
+│   ├── main.c          # 🏁 Thread init & sync logic
+│   ├── receptor.c      # 📑 File parsing logic
+│   ├── dispatcher.c    # 🎯 Task routing engine
+│   └── units.c         # 🧮 Math operations (Units 0-4)
+├── 📁 docs/
+[cite_start]│   └── Project-All.pdf  # 📘 Course instructions [cite: 2]
+├── 🔨 Makefile         # ⚡ Automation for building
+└── 🚫 .gitignore       # 🧹 Clean repository management
+
+```
+
+---
+
+## ⚙️ Unit Operations Table
+
+| Unit | Operation | Description |
+| --- | --- | --- |
+| **0** | `+7 % M` | Addition & Modulo 
+| **1** | `*2 % M` | Multiplication & Modulo 
+| **2** | `^5 % M` | Power & Modulo 
+| **3** | `-19` | Subtraction 
+| **4** | `Print` | Final Result Output 
+
+---
 
 ## 🚀 Getting Started
-### Prerequisites
-- GCC compiler
-- Pthread library
 
-### Installation & Execution
-1. Clone the repository:
-   `git clone https://github.com/your-username/ThreadFlow-OS.git`
-2. Compile the project:
-   `make`
-3. Run the simulator:
-   `./system_sim input_file.txt`
+### 📋 Prerequisites
+
+* **GCC** compiler
+* **Pthread** library (POSIX threads)
+
+### 💻 Installation & Execution
+
+1. **Clone the repo:**
+```bash
+git clone https://github.com/your-username/ThreadFlow-OS.git
+
+```
+
+
+2. **Compile the engine:**
+```bash
+make
+
+```
+
+
+3. **Run the simulation:**
+```bash
+./system_sim input_file.txt
+
+```
+
+
+
+---
 
 ## 👥 The Team
-- Member 1: [Name] - Concurrency & Synchronization
-- Member 2: [Name] - File I/O & Receptor Logic
-- Member 3: [Name] - Dispatcher & Unit Operations
+
+* 🧬 **Member 1**: [Name] — *Concurrency & Synchronization*
+* 📂 **Member 2**: [Name] — *File I/O & Receptor Logic*
+* 🎮 **Member 3**: [Name] — *Dispatcher & Unit Operations*
+
+---
