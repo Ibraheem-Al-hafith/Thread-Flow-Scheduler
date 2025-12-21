@@ -56,7 +56,7 @@ ThreadFlow-OS/
 │   ├── dispatcher.c    # 🎯 Task routing engine
 │   └── units.c         # 🧮 Math operations (Units 0-4)
 ├── 📁 docs/
-[cite_start]│   └── Project-All.pdf  # 📘 Course instructions [cite: 2]
+    └── Project-All.pdf  # 📘 Course instructions [cite: 2]
 ├── 🔨 Makefile         # ⚡ Automation for building
 └── 🚫 .gitignore       # 🧹 Clean repository management
 
@@ -87,7 +87,7 @@ ThreadFlow-OS/
 
 1. **Clone the repo:**
 ```bash
-git clone https://github.com/your-username/ThreadFlow-OS.git
+git clone https://github.com/Ibraheem-Al-hafith/Thread-Flow-Scheduler.git
 
 ```
 
