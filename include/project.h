@@ -7,7 +7,9 @@
 #include <sys/time.h>
 
 #define M 10000 //The constant for modulo operations
-#define QUEUE_CAPACITY 100
+#define QUEUE_CAPACITY 100  // identify the waiting queue capacity
+#define UNIT_QUEUE_CAPACITY 20  // identify the unit queue capacity
+
 typedef struct {
     /* The Global structure for the tasks */
     int id;                 // Unique ID
@@ -29,6 +31,19 @@ typedef struct {
     pthread_cond_t not_full;    // to check if the queue is full
     pthread_cond_t not_empty;   // to check if the queue is empty
 }WaitingQueue;
+
+// The unit queue structure
+typedef struct {
+    struct task* buffer[20]; // size of the queue
+    int rear;   // point to the next free space
+    int front;  // points to the first element exists in the array
+    int size;   // number of elements in the array
+
+    pthread_mutex_t mutex;  // to handle the synchronization between dispatcher and unit
+    pthread_cond_t not_full;    // to check if the queue is full
+    pthread_cond_t not_empty;   // to check if the queue is empty
+}UnitQueue;
+
 
 // Function prototypes :
 void queue_init(WaitingQueue *q);          // Queue initialization (for the waining queue and unit queues)
