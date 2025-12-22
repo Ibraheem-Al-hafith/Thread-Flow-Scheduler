@@ -18,24 +18,22 @@ typedef struct {
     int current_step;       // We add this to track the progress !!
 } Task;
 
-// The Node for our linked-list queue
-typedef struct Node {
-    Task *task;
-    struct Node *next;
-} Node;
-
 // The Queue structure
 typedef struct {
-    Node *head;
-    Node *tail;
-    pthread_mutex_t lock;   // This is the "key" to the queue, this prevents two objects from accessing the queue on the same time
-    pthread_cond_t notify;  // This is the "Alarm clock" for waiting thread , think of it like when the queue is empty, then the dispatcher is sleeping, the moment the input insert into the queue, it will notify the dispatcher to start the work
-} Queue;
+    struct task* buffer[100]; // size of the queue
+    int rear;   // point to the next free space
+    int front;  // points to the first element exists in the array
+    int size;   // number of elements in the array
+
+    pthread_mutex_t mutex;  // to handle the synchronization between receptor and dispatcher
+    pthread_cond_t not_full;    // to check if the queue is full
+    pthread_cond_t not_empty;   // to check if the queue is empty
+}waitingQueue;
 
 // Function prototypes :
-void queue_init(Queue *q);          // Queue initialization (for the waining queue and unit queues)
-void enqueue(Queue *q, Task *t);    // Inserting into queue
-Task* dequeue(Queue *q);           // Extracting from the queue
+void queue_init(waitingQueue *q);          // Queue initialization (for the waining queue and unit queues)
+void enqueue(waitingQueue *q, Task *t);    // Inserting into queue
+Task* dequeue(waitingQueue *q);           // Extracting from the queue
 /*
 
 discribtion:
