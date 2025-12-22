@@ -1,6 +1,6 @@
 #include "project.h"
 
-void queue_init(UnitQueue* u){
+void unit_queue_init(UnitQueue* u){
     u->front = 0;   // start from zero
     u->rear = 0;    // start from zero
     u->size = 0;    // make the queue empty
@@ -14,7 +14,7 @@ void queue_init(UnitQueue* u){
     pthread_cond_init(&u->not_full, NULL);
 }
 
-void enqueue(UnitQueue* u,Task* t){
+void enqueue_unit(UnitQueue* u,Task* t){
     pthread_mutex_lock(&u->mutex);   // lock the mutex to avoid conflict
     // check whether the queue is empty or not 
     if (u->size >= UNIT_QUEUE_CAPACITY){
@@ -37,7 +37,7 @@ void enqueue(UnitQueue* u,Task* t){
     pthread_mutex_unlock(&u->mutex);
 }
 
-Task* dequeue(UnitQueue* u){
+Task* dequeue_unit(UnitQueue* u){
     Task* t;
     pthread_mutex_lock(&u->mutex);
     if (&u->size == 0){

@@ -32,6 +32,7 @@ typedef struct {
     pthread_cond_t not_empty;   // to check if the queue is empty
 }WaitingQueue;
 
+WaitingQueue* wQueue;   // Create an object for waiting queue to be used in the files
 // The unit queue structure
 typedef struct {
     struct task* buffer[20]; // size of the queue
