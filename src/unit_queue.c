@@ -1,4 +1,4 @@
-#include "project.h"
+#include "../include/project.h"
 
 void unit_queue_init(UnitQueue* u){
     u->front = 0;   // start from zero
