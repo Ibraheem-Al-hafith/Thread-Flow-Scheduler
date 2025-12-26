@@ -6,6 +6,7 @@
 #include <pthread.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <linux/time.h>
 
 #define M 10000                // The constant for modulo operations
 #define QUEUE_CAPACITY 128     // identify the waiting queue capacity
@@ -18,7 +19,7 @@ typedef struct
     int value;            // Value to be operated on
     struct timeval atime; // Arrival time
     int unit_count;       // How many units to be visit
-    int *unit_id;         // List of unit IDs
+    int *unit_ids;        // List of unit IDs
     int current_step;     // We add this to track the progress !!
 } Task;
 // The Queue structure
@@ -56,11 +57,7 @@ void enqueue(WaitingQueue *q, Task *t); // Inserting into queue
 Task *dequeue(WaitingQueue *q);         // Extracting from the queue
 void *receptor(WaitingQueue *wQueue);   // a function used for the receptor
 void *dispatcher(WaitingQueue *q);      // a function used for the dispatcher
-// Define a function to assign zero to the task current_step
-void task_init(Task *t)
-{
-    t->current_step = 0;
-}
+
 /*
 
 discribtion:
