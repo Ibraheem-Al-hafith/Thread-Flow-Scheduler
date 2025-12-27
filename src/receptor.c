@@ -2,10 +2,6 @@
 
 void *receptor(void *arg)
 {
-    // define an integer to count the number of tasks
-    int total_tasks = 0;
-    // define an integer that will be used as an indicator to receptor ending
-    int receptor_done = 0;
     // get the file name
     char *filename = (char *)arg;
     // open the file for reading
@@ -71,12 +67,9 @@ void *receptor(void *arg)
         t->unit_count = uc;
         t->unit_ids = uids;
         t->current_step = 0;
-        /*
-        We used clock_gettime() instead of gettimeofday() because it is more precisely in
-        which it measures in nanoseconds, furthermore we used CLOCK_MONOTONIC because it
-        gives the actual time and not affected to time changes such as NTP
-        */
-        clock_gettime(CLOCK_MONOTONIC, &t->atime);
+        // make the default value by zero until it inserted
+        t->atime.tv_sec = 0;
+        t->atime.tv_usec = 0;
         // update global counters and enqueue the task
         enqueue(wQueue, t);
         total_tasks++;

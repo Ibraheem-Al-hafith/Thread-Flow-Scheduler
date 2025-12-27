@@ -12,6 +12,7 @@
 #define QUEUE_CAPACITY 128     // identify the waiting queue capacity
 #define UNIT_QUEUE_CAPACITY 32 // identify the unit queue capacity
 #define UNITS_NUMBER 5
+
 typedef struct
 {
     /* The Global structure for the tasks */
@@ -24,6 +25,7 @@ typedef struct
     int *unit_ids;         // List of unit IDs
     int current_step;      // We add this to track the progress !!
 } Task;
+
 // The Queue structure
 typedef struct
 {
@@ -51,14 +53,27 @@ typedef struct
     pthread_cond_t not_empty; // to check if the queue is empty
 } UnitQueue;
 // create queue for each unit
-UnitQueue *u[UNITS_NUMBER];
+UnitQueue *uQueue[UNITS_NUMBER];
+
 // Function prototypes :
-void queue_init(WaitingQueue *q);       // Queue initialization (for the waining queue)
-void unit_queue_init(UnitQueue *u);     // unit queue initialization (for the unit queues)
-void enqueue(WaitingQueue *q, Task *t); // Inserting into queue
-Task *dequeue(WaitingQueue *q);         // Extracting from the queue
-void *receptor(WaitingQueue *wQueue);   // a function used for the receptor
-void *dispatcher(WaitingQueue *q);      // a function used for the dispatcher
+void queue_init(WaitingQueue *q);         // Queue initialization (for the waining queue)
+void unit_queue_init(UnitQueue *u);       // unit queue initialization (for the unit queues)
+void enqueue(WaitingQueue *q, Task *t);   // Inserting into queue
+Task *dequeue(WaitingQueue *q);           // Extracting from the queue
+void enqueue_unit(UnitQueue *u, Task *t); // a function used by dispatcher to enqueue into unit queue
+Task *dequeue_unit(UnitQueue *u);         // a function used by the desired unit to operate on the task
+void *receptor(void *arg);                // a function used for the receptor
+// define an integer that will be used as an indicator to receptor ending
+int receptor_done = 0;
+// define an integer to count the number of tasks
+int total_tasks = 0;
+void *dispatcher(WaitingQueue *q); // a function used for the dispatcher
+// define the unit functions
+void *unit_0(UnitQueue *u);
+void *unit_1(UnitQueue *u);
+void *unit_2(UnitQueue *u);
+void *unit_3(UnitQueue *u);
+void *unit_4(UnitQueue *u);
 
 /*
 

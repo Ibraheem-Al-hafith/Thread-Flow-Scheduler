@@ -11,16 +11,16 @@ for the lifetime of the program, the dispatcher is responsible for :
 
 void *dispatcher(WaitingQueue *q)
 {
-    while (1)
+    while (receptor_done == 0 || q->front != q->rear)
     {
         // 1. Pull
-        Task *t = dequeue(q);
+        Task *t = dequeue_unit(q);
 
         // 2. Identify
-        int target_unit = t->unit_id[t->current_step];
+        int target_unit = t->unit_ids[t->current_step];
 
         // 3. Forward
-        enqueue(u[target_unit], t);
+        enqueue_unit(uQueue[target_unit], t);
 
         printf("Dispatcher: Task %d sent to Unit %d successfully!!", t->id, target_unit);
     }
