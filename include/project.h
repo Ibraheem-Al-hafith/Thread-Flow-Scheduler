@@ -15,12 +15,14 @@
 typedef struct
 {
     /* The Global structure for the tasks */
-    int id;               // Unique ID
-    int value;            // Value to be operated on
-    struct timeval atime; // Arrival time
-    int unit_count;       // How many units to be visit
-    int *unit_ids;        // List of unit IDs
-    int current_step;     // We add this to track the progress !!
+    int id;                // Unique ID
+    int value;             // Value to be operated on
+    struct timeval atime;  // Arrival time
+    struct timeval dtime;  // dispature time
+    double execution_time; // the time it took to complete
+    int unit_count;        // How many units to be visit
+    int *unit_ids;         // List of unit IDs
+    int current_step;      // We add this to track the progress !!
 } Task;
 // The Queue structure
 typedef struct
