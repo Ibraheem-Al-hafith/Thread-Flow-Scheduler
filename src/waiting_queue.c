@@ -1,4 +1,4 @@
-#include "project.h"
+#include "../include/project.h"
 
 void queue_init(WaitingQueue *q)
 {
@@ -23,7 +23,7 @@ void enqueue(WaitingQueue *q, Task *t)
     if (q->size >= QUEUE_CAPACITY)
     {
         // if so, waiting until a signal is made by the dequeue
-        printf("The queue is full ! waiting until a room is available. \n");
+        printf("The waiting queue is full ! waiting until a room is available. \n");
         // wait for the signal
         pthread_cond_wait(&q->not_full, &q->mutex);
     }
@@ -35,9 +35,7 @@ void enqueue(WaitingQueue *q, Task *t)
     we assign the clock time in this step because the task can be wait if
     the dispatcher is using waiting queue
     */
-    clock_gettime(CLOCK_MONOTONIC, &t->atime);
-    // print a message to indicate of inserting a task
-    printf("a room is available ! entering the data .. \n");
+    // clock_gettime(CLOCK_MONOTONIC, &t->atime);
     // inserting the desired task
     q->buffer[q->rear] = t;
     // increment the rear by one
@@ -54,9 +52,9 @@ Task *dequeue(WaitingQueue *q)
 {
     Task *t;
     pthread_mutex_lock(&q->mutex);
-    if (&q->size == 0)
+    if (q->size == 0)
     {
-        printf("The queue is empty ! waiting until the queue is filled with data. \n");
+        printf("The waiting queue is empty ! waiting until the queue is filled with data. \n");
         pthread_cond_wait(&q->not_empty, &q->mutex);
     }
     t = q->buffer[q->front];

@@ -1,14 +1,15 @@
 #include "../include/project.h"
-
-void *unit_0(UnitQueue *u)
+void *unit_0(void *uq)
 {
-    while (receptor_done == 0 || u->front != u->rear)
+    UnitQueue *u = (UnitQueue *)uq;
+    while (!(receptor_done == true && u->rear == 0 && u->front == 0))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
         int temp = t->value;       // store the value in temp to avoid more memory access
         temp = (temp + 7) % M;     // execute the unit operation
         t->value = temp;           // update the task value
         t->current_step++;         // increment the current step by one
+        printf("current step of task[%d] is {%d} out of {%d}\n", t->id, t->current_step, t->unit_count);
         // check if the task is completed or not
         if (t->current_step < t->unit_count)
         {
@@ -19,7 +20,7 @@ void *unit_0(UnitQueue *u)
         {
             // calculate the time it tooks until it finished
             // get the time
-            clock_gettime(CLOCK_MONOTONIC, &t->dtime);
+            // clock_gettime(CLOCK_MONOTONIC, &t->dtime);
             /*
                 the first operand to calculate the seconds, the second for the nanoseconds, the third
                 to divide by 1 billion to adjust the summation
@@ -31,15 +32,17 @@ void *unit_0(UnitQueue *u)
         }
     }
 }
-void *unit_1(UnitQueue *u)
+void *unit_1(void *uq)
 {
-    while (receptor_done == 0 || u->front != u->rear)
+    UnitQueue *u = (UnitQueue *)uq;
+    while (!(receptor_done == true && u->rear == 0 && u->front == 0))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
         int temp = t->value;       // store the value in temp to avoid more memory access
         temp = (temp * 2) % M;     // execute the unit operation
         t->value = temp;           // update the task value
         t->current_step++;         // increment the current step by one
+        printf("current step of task[%d] is {%d} out of {%d}\n", t->id, t->current_step, t->unit_count);
         // check if the task is completed or not
         if (t->current_step < t->unit_count)
         {
@@ -50,7 +53,7 @@ void *unit_1(UnitQueue *u)
         {
             // calculate the time it tooks until it finished
             // get the time
-            clock_gettime(CLOCK_MONOTONIC, &t->dtime);
+            // clock_gettime(CLOCK_MONOTONIC, &t->dtime);
             /*
                 the first operand to calculate the seconds, the second for the nanoseconds, the third
                 to divide by 1 billion to adjust the summation
@@ -62,15 +65,17 @@ void *unit_1(UnitQueue *u)
         }
     }
 }
-void *unit_2(UnitQueue *u)
+void *unit_2(void *uq)
 {
-    while (receptor_done == 0 || u->front != u->rear)
+    UnitQueue *u = (UnitQueue *)uq;
+    while (!(receptor_done == true && u->rear == 0 && u->front == 0))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
         int temp = t->value;       // store the value in temp to avoid more memory access
         temp = (temp ^ 5) % M;     // execute the unit operation
         t->value = temp;           // update the task value
         t->current_step++;         // increment the current step by one
+        printf("current step of task[%d] is {%d} out of {%d}\n", t->id, t->current_step, t->unit_count);
         // check if the task is completed or not
         if (t->current_step < t->unit_count)
         {
@@ -81,7 +86,7 @@ void *unit_2(UnitQueue *u)
         {
             // calculate the time it tooks until it finished
             // get the time
-            clock_gettime(CLOCK_MONOTONIC, &t->dtime);
+            // clock_gettime(CLOCK_MONOTONIC, &t->dtime);
             /*
                 the first operand to calculate the seconds, the second for the nanoseconds, the third
                 to divide by 1 billion to adjust the summation
@@ -93,15 +98,17 @@ void *unit_2(UnitQueue *u)
         }
     }
 }
-void *unit_3(UnitQueue *u)
+void *unit_3(void *uq)
 {
-    while (receptor_done == 0 || u->front != u->rear)
+    UnitQueue *u = (UnitQueue *)uq;
+    while (!(receptor_done == true && u->rear == 0 && u->front == 0))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
         int temp = t->value;       // store the value in temp to avoid more memory access
         temp = (temp - 19);        // execute the unit operation
         t->value = temp;           // update the task value
         t->current_step++;         // increment the current step by one
+        printf("current step of task[%d] is {%d} out of {%d}\n", t->id, t->current_step, t->unit_count);
         // check if the task is completed or not
         if (t->current_step < t->unit_count)
         {
@@ -112,7 +119,7 @@ void *unit_3(UnitQueue *u)
         {
             // calculate the time it tooks until it finished
             // get the time
-            clock_gettime(CLOCK_MONOTONIC, &t->dtime);
+            // clock_gettime(CLOCK_MONOTONIC, &t->dtime);
             /*
                 the first operand to calculate the seconds, the second for the nanoseconds, the third
                 to divide by 1 billion to adjust the summation
@@ -124,13 +131,16 @@ void *unit_3(UnitQueue *u)
         }
     }
 }
-void *unit_4(UnitQueue *u)
+void *unit_4(void *uq)
 {
-    while (receptor_done == 0 || u->front != u->rear)
+    UnitQueue *u = (UnitQueue *)uq;
+    while (!(receptor_done == true && u->rear == 0 && u->front == 0))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
         // display a message to indicate the end of the task
-        printf("the value of the task[%d] after being processed is {%d} ", t->id, t->value);
+        printf("the value of the task[%d] after being processed is {%d}\n", t->id, t->value);
+        t->current_step++; // increment the current step by one
+        printf("current step of task[%d] is {%d} out of {%d}\n", t->id, t->current_step, t->unit_count);
         // check if the task is completed or not
         if (t->current_step < t->unit_count)
         {
@@ -141,7 +151,7 @@ void *unit_4(UnitQueue *u)
         {
             // calculate the time it tooks until it finished
             // get the time
-            clock_gettime(CLOCK_MONOTONIC, &t->dtime);
+            // clock_gettime(CLOCK_MONOTONIC, &t->dtime);
             /*
                 the first operand to calculate the seconds, the second for the nanoseconds, the third
                 to divide by 1 billion to adjust the summation

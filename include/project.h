@@ -6,7 +6,9 @@
 #include <pthread.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <linux/time.h>
+#include <time.h>
+#include <string.h>
+#include <stdbool.h>
 
 #define M 10000                // The constant for modulo operations
 #define QUEUE_CAPACITY 128     // identify the waiting queue capacity
@@ -29,31 +31,32 @@ typedef struct
 // The Queue structure
 typedef struct
 {
-    struct task *buffer[QUEUE_CAPACITY]; // size of the queue
-    int rear;                            // point to the next free space
-    int front;                           // points to the first element exists in the array
-    int size;                            // number of elements in the array
+    Task *buffer[QUEUE_CAPACITY]; // size of the queue
+    int rear;                     // point to the next free space
+    int front;                    // points to the first element exists in the array
+    int size;                     // number of elements in the array
 
     pthread_mutex_t mutex;    // to handle the synchronization between receptor and dispatcher
     pthread_cond_t not_full;  // to check if the queue is full
     pthread_cond_t not_empty; // to check if the queue is empty
 } WaitingQueue;
 
-WaitingQueue *wQueue; // Create an object for waiting queueto be used in the files
+extern WaitingQueue *wQueue; // Create an object for waiting queueto be used in the files
 // The unit queue structure
 typedef struct
 {
-    struct task *buffer[UNIT_QUEUE_CAPACITY]; // size of the queue
-    int rear;                                 // point to the next free space
-    int front;                                // points to the first element exists in the array
-    int size;                                 // number of elements in the array
+    int unit_id;                       // the unit identifier
+    Task *buffer[UNIT_QUEUE_CAPACITY]; // size of the queue
+    int rear;                          // point to the next free space
+    int front;                         // points to the first element exists in the array
+    int size;                          // number of elements in the array
 
     pthread_mutex_t mutex;    // to handle the synchronization between dispatcher and unit
     pthread_cond_t not_full;  // to check if the queue is full
     pthread_cond_t not_empty; // to check if the queue is empty
 } UnitQueue;
 // create queue for each unit
-UnitQueue *uQueue[UNITS_NUMBER];
+extern UnitQueue *uQueue[UNITS_NUMBER];
 
 // Function prototypes :
 void queue_init(WaitingQueue *q);         // Queue initialization (for the waining queue)
@@ -64,16 +67,16 @@ void enqueue_unit(UnitQueue *u, Task *t); // a function used by dispatcher to en
 Task *dequeue_unit(UnitQueue *u);         // a function used by the desired unit to operate on the task
 void *receptor(void *arg);                // a function used for the receptor
 // define an integer that will be used as an indicator to receptor ending
-int receptor_done = 0;
+extern bool receptor_done;
 // define an integer to count the number of tasks
-int total_tasks = 0;
-void *dispatcher(WaitingQueue *q); // a function used for the dispatcher
+extern int total_tasks;
+void *dispatcher(void *q); // a function used for the dispatcher
 // define the unit functions
-void *unit_0(UnitQueue *u);
-void *unit_1(UnitQueue *u);
-void *unit_2(UnitQueue *u);
-void *unit_3(UnitQueue *u);
-void *unit_4(UnitQueue *u);
+void *unit_0(void *u);
+void *unit_1(void *u);
+void *unit_2(void *u);
+void *unit_3(void *u);
+void *unit_4(void *u);
 
 /*
 

@@ -8,13 +8,13 @@ for the lifetime of the program, the dispatcher is responsible for :
     3. pass the task to the desired unit.
 
 */
-
-void *dispatcher(WaitingQueue *q)
+void *dispatcher(void *wq)
 {
-    while (receptor_done == 0 || q->front != q->rear)
+    WaitingQueue *q = (WaitingQueue *)wq;
+    while (receptor_done == false || q->rear != 0 || q->front != 0)
     {
         // 1. Pull
-        Task *t = dequeue_unit(q);
+        Task *t = dequeue(q);
 
         // 2. Identify
         int target_unit = t->unit_ids[t->current_step];
@@ -22,6 +22,8 @@ void *dispatcher(WaitingQueue *q)
         // 3. Forward
         enqueue_unit(uQueue[target_unit], t);
 
-        printf("Dispatcher: Task %d sent to Unit %d successfully!!", t->id, target_unit);
+        printf("Dispatcher: Task %d sent to Unit %d successfully!\n", t->id, target_unit);
     }
+    // printf("Dispatcher: No more tasks to dispatch. Exiting...\n");
+    // pthread_exit(NULL);
 }

@@ -1,4 +1,4 @@
-#include "project.h"
+#include "../include/project.h"
 
 void *receptor(void *arg)
 {
@@ -62,6 +62,8 @@ void *receptor(void *arg)
         }
         // assign the splitted values to the task structure
         Task *t;
+        // allocate memory for the task object
+        t = (Task *)malloc(sizeof(Task));
         t->id = id;
         t->value = val;
         t->unit_count = uc;
@@ -77,6 +79,7 @@ void *receptor(void *arg)
     // close the file
     fclose(f);
     // alter the receptor_done to 1 to indicate the end of receptor function
-    receptor_done = 1;
+    receptor_done = true;
+    printf("all the tasks have been read successfully by the receptor.\n");
     return NULL;
 }
