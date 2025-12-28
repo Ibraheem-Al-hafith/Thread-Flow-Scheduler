@@ -27,7 +27,7 @@ void *unit_0(void *uq)
             */
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_usec - t->atime.tv_usec) / 1e9;
             // display a message to indicate the end of the task
-            printf("the task[%d] has been finished successfully and it took {%d} seconds. The value is {%d}\n", t->id, t->execution_time, t->value);
+            printf("the task[%d] has been finished successfully. The value is {%d}\n", t->id, t->value);
             usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
         }
     }
@@ -60,7 +60,7 @@ void *unit_1(void *uq)
             */
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_usec - t->atime.tv_usec) / 1e9;
             // display a message to indicate the end of the task
-            printf("the task[%d] has been finished successfully and it took {%d} seconds. The value is {%d}\n", t->id, t->execution_time, t->value);
+            printf("the task[%d] has been finished successfully. The value is {%d}\n", t->id, t->value);
             usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
         }
     }
@@ -93,7 +93,7 @@ void *unit_2(void *uq)
             */
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_usec - t->atime.tv_usec) / 1e9;
             // display a message to indicate the end of the task
-            printf("the task[%d] has been finished successfully and it took {%d} seconds. The value is {%d}\n", t->id, t->execution_time, t->value);
+            printf("the task[%d] has been finished successfully. The value is {%d}\n", t->id, t->value);
             usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
         }
     }
@@ -126,7 +126,7 @@ void *unit_3(void *uq)
             */
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_usec - t->atime.tv_usec) / 1e9;
             // display a message to indicate the end of the task
-            printf("the task[%d] has been finished successfully and it took {%d} seconds. The value is {%d}\n", t->id, t->execution_time, t->value);
+            printf("the task[%d] has been finished successfully. The value is {%d}\n", t->id, t->value);
             usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
         }
     }
@@ -158,7 +158,7 @@ void *unit_4(void *uq)
             */
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_usec - t->atime.tv_usec) / 1e9;
             // display a message to indicate the end of the task
-            printf("the task[%d] has been finished successfully and it took {%d} seconds. The value is {%d}\n", t->id, t->execution_time, t->value);
+            printf("the task[%d] has been finished successfully. The value is {%d}\n", t->id, t->value);
             usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
         }
     }
