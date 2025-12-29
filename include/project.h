@@ -66,10 +66,20 @@ Task *dequeue(WaitingQueue *q);           // Extracting from the queue
 void enqueue_unit(UnitQueue *u, Task *t); // a function used by dispatcher to enqueue into unit queue
 Task *dequeue_unit(UnitQueue *u);         // a function used by the desired unit to operate on the task
 void *receptor(void *arg);                // a function used for the receptor
+// define a function to wake up the waiting threads
+void dispatcher_waker();
+// define a boolean variable to check if the dispatcher has been waked
+extern bool dispatcher_status;
+// define a boolean array to check if the units has been waked
+extern bool units_status[UNITS_NUMBER];
+// define a function to wake up the units
+void units_waker();
 // define an integer that will be used as an indicator to receptor ending
 extern bool receptor_done;
 // define an integer to count the number of tasks
 extern int total_tasks;
+// define an integer to count the number of completed tasks
+extern int completed_tasks;
 void *dispatcher(void *q); // a function used for the dispatcher
 // define the unit functions
 void *unit_0(void *u);

@@ -81,5 +81,5 @@ void *receptor(void *arg)
     // alter the receptor_done to 1 to indicate the end of receptor function
     receptor_done = true;
     printf("all the tasks have been read successfully by the receptor.\n");
-    return NULL;
+    pthread_exit(NULL);
 }

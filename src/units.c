@@ -2,7 +2,7 @@
 void *unit_0(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
-    while (!(receptor_done == true && u->rear == 0 && u->front == 0))
+    while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
         int temp = t->value;       // store the value in temp to avoid more memory access
@@ -28,14 +28,20 @@ void *unit_0(void *uq)
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_usec - t->atime.tv_usec) / 1e9;
             // display a message to indicate the end of the task
             printf("the task[%d] has been finished successfully. The value is {%d}\n", t->id, t->value);
+            // increment completed_tasks by one
+            completed_tasks++;
             usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
         }
     }
+    dispatcher_waker();
+    usleep(50000);
+    printf("Unit[%d]: No more tasks to process. Exiting...\n", u->unit_id);
+    units_waker();
 }
 void *unit_1(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
-    while (!(receptor_done == true && u->rear == 0 && u->front == 0))
+    while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
         int temp = t->value;       // store the value in temp to avoid more memory access
@@ -61,14 +67,19 @@ void *unit_1(void *uq)
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_usec - t->atime.tv_usec) / 1e9;
             // display a message to indicate the end of the task
             printf("the task[%d] has been finished successfully. The value is {%d}\n", t->id, t->value);
+            // increment completed_tasks by one
+            completed_tasks++;
             usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
         }
     }
+    dispatcher_waker();
+    usleep(50000);
+    printf("Unit[%d]: No more tasks to process. Exiting...\n", u->unit_id);
 }
 void *unit_2(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
-    while (!(receptor_done == true && u->rear == 0 && u->front == 0))
+    while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
         int temp = t->value;       // store the value in temp to avoid more memory access
@@ -94,14 +105,20 @@ void *unit_2(void *uq)
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_usec - t->atime.tv_usec) / 1e9;
             // display a message to indicate the end of the task
             printf("the task[%d] has been finished successfully. The value is {%d}\n", t->id, t->value);
+            // increment completed_tasks by one
+            completed_tasks++;
             usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
         }
     }
+    dispatcher_waker();
+    usleep(50000);
+    printf("Unit[%d]: No more tasks to process. Exiting...\n", u->unit_id);
+    units_waker();
 }
 void *unit_3(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
-    while (!(receptor_done == true && u->rear == 0 && u->front == 0))
+    while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
         int temp = t->value;       // store the value in temp to avoid more memory access
@@ -127,14 +144,20 @@ void *unit_3(void *uq)
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_usec - t->atime.tv_usec) / 1e9;
             // display a message to indicate the end of the task
             printf("the task[%d] has been finished successfully. The value is {%d}\n", t->id, t->value);
+            // increment completed_tasks by one
+            completed_tasks++;
             usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
         }
     }
+    dispatcher_waker();
+    usleep(50000);
+    printf("Unit[%d]: No more tasks to process. Exiting...\n", u->unit_id);
+    units_waker();
 }
 void *unit_4(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
-    while (!(receptor_done == true && u->rear == 0 && u->front == 0))
+    while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
         // display a message to indicate the end of the task
@@ -159,7 +182,13 @@ void *unit_4(void *uq)
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_usec - t->atime.tv_usec) / 1e9;
             // display a message to indicate the end of the task
             printf("the task[%d] has been finished successfully. The value is {%d}\n", t->id, t->value);
+            // increment completed_tasks by one
+            completed_tasks++;
             usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
         }
     }
+    dispatcher_waker();
+    usleep(50000);
+    printf("Unit[%d]: No more tasks to process. Exiting...\n", u->unit_id);
+    units_waker();
 }

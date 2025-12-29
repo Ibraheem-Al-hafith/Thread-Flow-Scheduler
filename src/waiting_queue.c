@@ -52,6 +52,11 @@ Task *dequeue(WaitingQueue *q)
 {
     Task *t;
     pthread_mutex_lock(&q->mutex);
+    if (receptor_done && total_tasks == completed_tasks && q->size == 0)
+    {
+        pthread_mutex_unlock(&q->mutex);
+        return NULL;
+    }
     if (q->size == 0)
     {
         printf("The waiting queue is empty ! waiting until the queue is filled with data. \n");
@@ -64,4 +69,12 @@ Task *dequeue(WaitingQueue *q)
     pthread_cond_signal(&q->not_full);
     pthread_mutex_unlock(&q->mutex);
     return t;
+}
+pthread_mutex_t dispatcher_mutex;
+void dispatcher_waker()
+{
+    pthread_mutex_lock(&dispatcher_mutex);
+    pthread_cond_signal(&wQueue->not_empty);
+    pthread_mutex_unlock(&wQueue->mutex);
+    pthread_mutex_unlock(&dispatcher_mutex);
 }

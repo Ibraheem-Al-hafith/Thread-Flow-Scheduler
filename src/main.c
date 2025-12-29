@@ -7,6 +7,11 @@ UnitQueue *uQueue[UNITS_NUMBER];
 bool receptor_done = false;
 // initialize and assign an integer to count the total tasks
 int total_tasks = 0;
+// initialize and assign an integer to count the completed tasks
+int completed_tasks = 0;
+// initialize and assign a default values to dispatcher and units status
+bool dispatcher_status = false;
+bool units_status[UNITS_NUMBER] = {false, false, false, false, false};
 int main(int argc, char *argv[])
 {
     // get the file name
