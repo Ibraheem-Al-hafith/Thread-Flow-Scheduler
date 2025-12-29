@@ -73,7 +73,7 @@ extern bool dispatcher_status;
 // define a boolean array to check if the units has been waked
 extern bool units_status[UNITS_NUMBER];
 // define a function to wake up the units
-void units_waker();
+void units_waker(int unit_id);
 // define an integer that will be used as an indicator to receptor ending
 extern bool receptor_done;
 // define an integer to count the number of tasks

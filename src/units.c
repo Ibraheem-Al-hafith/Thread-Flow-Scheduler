@@ -36,7 +36,7 @@ void *unit_0(void *uq)
     dispatcher_waker();
     usleep(50000);
     printf("Unit[%d]: No more tasks to process. Exiting...\n", u->unit_id);
-    units_waker();
+    units_status[u->unit_id] = true;
 }
 void *unit_1(void *uq)
 {
@@ -75,6 +75,7 @@ void *unit_1(void *uq)
     dispatcher_waker();
     usleep(50000);
     printf("Unit[%d]: No more tasks to process. Exiting...\n", u->unit_id);
+    units_status[u->unit_id] = true;
 }
 void *unit_2(void *uq)
 {
@@ -113,7 +114,7 @@ void *unit_2(void *uq)
     dispatcher_waker();
     usleep(50000);
     printf("Unit[%d]: No more tasks to process. Exiting...\n", u->unit_id);
-    units_waker();
+    units_status[u->unit_id] = true;
 }
 void *unit_3(void *uq)
 {
@@ -152,7 +153,7 @@ void *unit_3(void *uq)
     dispatcher_waker();
     usleep(50000);
     printf("Unit[%d]: No more tasks to process. Exiting...\n", u->unit_id);
-    units_waker();
+    units_status[u->unit_id] = true;
 }
 void *unit_4(void *uq)
 {
@@ -190,5 +191,5 @@ void *unit_4(void *uq)
     dispatcher_waker();
     usleep(50000);
     printf("Unit[%d]: No more tasks to process. Exiting...\n", u->unit_id);
-    units_waker();
+    units_status[u->unit_id] = true;
 }

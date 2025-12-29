@@ -29,5 +29,5 @@ void *dispatcher(void *wq)
     }
     printf("dispatcher has finished\n");
     dispatcher_status = true;
-    // pthread_exit(NULL);
+    pthread_exit(NULL);
 }

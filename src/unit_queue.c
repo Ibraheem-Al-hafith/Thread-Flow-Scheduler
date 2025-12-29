@@ -59,11 +59,13 @@ Task *dequeue_unit(UnitQueue *u)
     return t;
 }
 pthread_mutex_t units_mutex;
-void units_waker()
+void units_waker(int unit_id)
 {
     pthread_mutex_lock(&units_mutex);
     for (int i = 0; i < UNITS_NUMBER; i++)
     {
+        if (i == unit_id)
+            continue;
         pthread_cond_signal(&uQueue[i]->not_empty);
         pthread_mutex_unlock(&uQueue[i]->mutex);
     }
