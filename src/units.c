@@ -1,4 +1,5 @@
 #include "../include/project.h"
+#include <math.h>
 void *unit_0(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
@@ -75,16 +76,26 @@ void *unit_1(void *uq)
     printf("Unit[%d]: No more tasks to process. Exiting...\n", u->unit_id);
     units_status[u->unit_id] = true;
 }
+int power(long long base, int power)
+{
+    int result = 1;
+    for (int i = 0; i < power; i++)
+    {
+        result *= base;
+    }
+    return result;
+}
 void *unit_2(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
     while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
-        int temp = t->value;       // store the value in temp to avoid more memory access
-        temp = (temp ^ 5) % M;     // execute the unit operation
-        t->value = temp;           // update the task value
-        t->current_step++;         // increment the current step by one
+        long long temp = t->value; // store the value in temp to avoid more memory access
+        temp = power(temp, 5);     // execute the unit operation
+        temp = (int)temp % M;
+        t->value = temp;   // update the task value
+        t->current_step++; // increment the current step by one
         printf("current step of task[%d] is {%d} out of {%d}\n", t->id, t->current_step, t->unit_count);
         // check if the task is completed or not
         if (t->current_step < t->unit_count)

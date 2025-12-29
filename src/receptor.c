@@ -26,7 +26,7 @@ void *receptor(void *arg)
         // initialize an integer for the unit count
         int uc;
         // initialize an integer for the task value
-        int val;
+        long long val;
         // split the values in the line according to spaces, tab, and newline
         char *tok = strtok(line, " \t\n");
         // if tok is NULL continue and get next line

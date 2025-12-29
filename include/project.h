@@ -19,7 +19,7 @@ typedef struct
 {
     /* The Global structure for the tasks */
     int id;                // Unique ID
-    int value;             // Value to be operated on
+    long long value;       // Value to be operated on
     struct timeval atime;  // Arrival time
     struct timeval dtime;  // dispature time
     double execution_time; // the time it took to complete

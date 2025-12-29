@@ -11,7 +11,7 @@ int total_tasks = 0;
 int completed_tasks = 0;
 // initialize and assign a default values to dispatcher and units status
 bool dispatcher_status = false;
-bool units_status[UNITS_NUMBER] = {false, false, false, false, false};
+bool units_status[UNITS_NUMBER];
 int main(int argc, char *argv[])
 {
     // get the file name
@@ -111,5 +111,10 @@ int main(int argc, char *argv[])
     }
     // print a message to indicate the end of the program
     printf("the prgoram finished %d tasks successfully !\n", total_tasks);
+    free(wQueue);
+    for (int i = 0; i < UNITS_NUMBER; i++)
+    {
+        free(uQueue[i]);
+    }
     return 0;
 }
