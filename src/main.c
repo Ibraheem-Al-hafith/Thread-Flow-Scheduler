@@ -75,9 +75,39 @@ int main(int argc, char *argv[])
     // make the main thread waiting for the threads
     pthread_join(receptor_id, NULL);
     pthread_join(dispatcher_id, NULL);
-    for (int i = 0; i < UNITS_NUMBER; i++)
+    int counter = 0;
+    while (1)
     {
-        pthread_join(unit_ids[i], NULL);
+        if (counter == UNITS_NUMBER)
+            break;
+        else
+        {
+            if (!units_status[0])
+            {
+                pthread_cond_signal(&uQueue[0]->not_empty);
+                counter++;
+            }
+            else if (!units_status[1])
+            {
+                pthread_cond_signal(&uQueue[1]->not_empty);
+                counter++;
+            }
+            else if (!units_status[2])
+            {
+                pthread_cond_signal(&uQueue[2]->not_empty);
+                counter++;
+            }
+            else if (!units_status[3])
+            {
+                pthread_cond_signal(&uQueue[3]->not_empty);
+                counter++;
+            }
+            else if (!units_status[4])
+            {
+                pthread_cond_signal(&uQueue[4]->not_empty);
+                counter++;
+            }
+        }
     }
     // print a message to indicate the end of the program
     printf("the prgoram finished %d tasks successfully !\n", total_tasks);
