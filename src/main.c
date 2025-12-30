@@ -11,7 +11,6 @@ int total_tasks = 0;
 int completed_tasks = 0;
 // initialize and assign a default values to dispatcher and units status
 bool dispatcher_status = false;
-bool units_status[UNITS_NUMBER];
 int main(int argc, char *argv[])
 {
     // get the file name
@@ -74,41 +73,13 @@ int main(int argc, char *argv[])
     }
     // make the main thread waiting for the threads
     pthread_join(receptor_id, NULL);
+    // waiting for the dispatcher to finish
     pthread_join(dispatcher_id, NULL);
-    int counter = 0;
-    while (1)
+    for (int i = 0; i < UNITS_NUMBER; i++)
     {
-        if (counter == UNITS_NUMBER)
-            break;
-        else
-        {
-            if (!units_status[0])
-            {
-                pthread_cond_signal(&uQueue[0]->not_empty);
-                counter++;
-            }
-            else if (!units_status[1])
-            {
-                pthread_cond_signal(&uQueue[1]->not_empty);
-                counter++;
-            }
-            else if (!units_status[2])
-            {
-                pthread_cond_signal(&uQueue[2]->not_empty);
-                counter++;
-            }
-            else if (!units_status[3])
-            {
-                pthread_cond_signal(&uQueue[3]->not_empty);
-                counter++;
-            }
-            else if (!units_status[4])
-            {
-                pthread_cond_signal(&uQueue[4]->not_empty);
-                counter++;
-            }
-        }
+        pthread_join(unit_ids[i], NULL);
     }
+    printf("all the unit threads exited.\n");
     // print a message to indicate the end of the program
     printf("the prgoram finished %d tasks successfully !\n", total_tasks);
     free(wQueue);

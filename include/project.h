@@ -1,12 +1,13 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
+#define _POSIX_C_SOURCE 199309L // for clock_gettime function
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <sys/time.h>
 #include <unistd.h>
 #include <time.h>
+#include <sys/time.h>
 #include <string.h>
 #include <stdbool.h>
 
@@ -20,8 +21,8 @@ typedef struct
     /* The Global structure for the tasks */
     int id;                // Unique ID
     long long value;       // Value to be operated on
-    struct timeval atime;  // Arrival time
-    struct timeval dtime;  // dispature time
+    struct timespec atime; // Arrival time
+    struct timespec dtime; // dispature time
     double execution_time; // the time it took to complete
     int unit_count;        // How many units to be visit
     int *unit_ids;         // List of unit IDs
@@ -68,12 +69,8 @@ Task *dequeue_unit(UnitQueue *u);         // a function used by the desired unit
 void *receptor(void *arg);                // a function used for the receptor
 // define a function to wake up the waiting threads
 void dispatcher_waker();
-// define a boolean variable to check if the dispatcher has been waked
-extern bool dispatcher_status;
 // define a boolean array to check if the units has been waked
-extern bool units_status[UNITS_NUMBER];
-// define a function to wake up the units
-void units_waker(int unit_id);
+extern bool dispatcher_status;
 // define an integer that will be used as an indicator to receptor ending
 extern bool receptor_done;
 // define an integer to count the number of tasks

@@ -27,6 +27,12 @@ void *dispatcher(void *wq)
 
         printf("Dispatcher: Task %d sent to Unit %d successfully!\n", t->id, target_unit);
     }
+    for (int i = 0; i < UNITS_NUMBER; i++)
+    {
+        pthread_cond_signal(&uQueue[i]->not_empty);
+        // wait until all unit threads exit
+        usleep(100000);
+    }
     printf("dispatcher has finished\n");
     dispatcher_status = true;
     pthread_exit(NULL);

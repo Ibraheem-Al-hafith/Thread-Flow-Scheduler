@@ -23,7 +23,7 @@ void enqueue_unit(UnitQueue *u, Task *t)
     if (u->size >= UNIT_QUEUE_CAPACITY)
     {
         // if so, waiting until a signal is made by the dequeue
-        printf("The unit queue [%d]is full ! waiting until a room is available. \n", u->unit_id);
+        // printf("The unit queue [%d]is full ! waiting until a room is available. \n", u->unit_id);
         // wait for the signal
         pthread_cond_wait(&u->not_full, &u->mutex);
     }
@@ -45,10 +45,20 @@ Task *dequeue_unit(UnitQueue *u)
 {
     Task *t;
     pthread_mutex_lock(&u->mutex);
+    if (receptor_done && total_tasks == completed_tasks && u->size == 0)
+    {
+        pthread_mutex_unlock(&u->mutex);
+        return NULL;
+    }
     if (u->size == 0)
     {
-        printf("The unit queue [%d] is empty ! waiting until the queue is filled with data. \n", u->unit_id);
+        // printf("The unit queue [%d] is empty ! waiting until the queue is filled with data. \n", u->unit_id);
         pthread_cond_wait(&u->not_empty, &u->mutex);
+        if (receptor_done && total_tasks == completed_tasks && u->size == 0)
+        {
+            pthread_mutex_unlock(&u->mutex);
+            return NULL;
+        }
     }
     t = u->buffer[u->front];
     u->buffer[u->front] = NULL;
@@ -57,17 +67,4 @@ Task *dequeue_unit(UnitQueue *u)
     pthread_cond_signal(&u->not_full);
     pthread_mutex_unlock(&u->mutex);
     return t;
-}
-pthread_mutex_t units_mutex;
-void units_waker(int unit_id)
-{
-    pthread_mutex_lock(&units_mutex);
-    for (int i = 0; i < UNITS_NUMBER; i++)
-    {
-        if (i == unit_id)
-            continue;
-        pthread_cond_signal(&uQueue[i]->not_empty);
-        pthread_mutex_unlock(&uQueue[i]->mutex);
-    }
-    pthread_mutex_unlock(&units_mutex);
 }

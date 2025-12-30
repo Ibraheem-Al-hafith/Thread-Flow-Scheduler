@@ -16,6 +16,10 @@ void *receptor(void *arg)
     char line[1024];
     while (fgets(line, sizeof(line), f))
     {
+        // assign the splitted values to the task structure
+        Task *t;
+        // allocate memory for the task object
+        t = (Task *)malloc(sizeof(Task));
         // skip blank lines and comments that start with '#'
         if (line[0] == '\n' || line[0] == '#')
             continue;
@@ -60,18 +64,14 @@ void *receptor(void *arg)
                 // otherwise assign the value
                 uids[i] = atoi(tok);
         }
-        // assign the splitted values to the task structure
-        Task *t;
-        // allocate memory for the task object
-        t = (Task *)malloc(sizeof(Task));
         t->id = id;
         t->value = val;
         t->unit_count = uc;
         t->unit_ids = uids;
         t->current_step = 0;
-        // make the default value by zero until it inserted
+        // assign a 0 value to the arrival time until it is added to the waiting queue
         t->atime.tv_sec = 0;
-        t->atime.tv_usec = 0;
+        t->atime.tv_nsec = 0;
         // update global counters and enqueue the task
         enqueue(wQueue, t);
         total_tasks++;

@@ -27,15 +27,18 @@ void enqueue(WaitingQueue *q, Task *t)
         // wait for the signal
         pthread_cond_wait(&q->not_full, &q->mutex);
     }
-    /*
-    We used clock_gettime() instead of gettimeofday() because it is more precisely in
-    which it measures in nanoseconds, furthermore we used CLOCK_MONOTONIC because it
-    gives the actual time and not affected to time changes such as NTP
+    if (t->atime.tv_sec == 0 && t->atime.tv_sec == 0)
+    {
+        /*
+            We used clock_gettime() instead of gettimeofday() because it is more precisely in
+            which it measures in nanoseconds, furthermore we used CLOCK_MONOTONIC because it
+            gives the actual time and not affected to time changes such as NTP
 
-    we assign the clock time in this step because the task can be wait if
-    the dispatcher is using waiting queue
-    */
-    // clock_gettime(CLOCK_MONOTONIC, &t->atime);
+            we assign the clock time in this step because the task can be wait if
+            the dispatcher is using waiting queue
+        */
+        clock_gettime(CLOCK_MONOTONIC, &t->atime);
+    }
     // inserting the desired task
     q->buffer[q->rear] = t;
     // increment the rear by one
@@ -59,8 +62,13 @@ Task *dequeue(WaitingQueue *q)
     }
     if (q->size == 0)
     {
-        printf("The waiting queue is empty ! waiting until the queue is filled with data. \n");
+        // printf("The waiting queue is empty ! waiting until the queue is filled with data. \n");
         pthread_cond_wait(&q->not_empty, &q->mutex);
+        if (receptor_done && total_tasks == completed_tasks && q->size == 0)
+        {
+            pthread_mutex_unlock(&q->mutex);
+            return NULL;
+        }
     }
     t = q->buffer[q->front];
     q->buffer[q->front] = NULL;
