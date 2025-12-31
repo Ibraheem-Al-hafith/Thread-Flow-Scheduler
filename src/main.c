@@ -19,17 +19,26 @@
 WaitingQueue *wQueue;
 // allocate memory for the unit queues
 UnitQueue *uQueue[UNITS_NUMBER];
-// declare and intialize an integer to identify the receptor status
+// declare and intialize a bool variable to identify the receptor status
 bool receptor_done = false;
 // declare and intialize an integer to count the total tasks
 int total_tasks = 0;
 // declare and intialize an integer to count the completed tasks
 int completed_tasks = 0;
+// declare an integer for the capacity of the completed tasks array (initial capacity is 128)
+int capacity = QUEUE_CAPACITY;
 // declare and intialize a default values to dispatcher and units status
+Completed_task *ct;
+// declare an integer to count the number of tasks inserted into the task array used for the output
+int num_tasks = 0;
 bool dispatcher_status = false;
 int main(int argc, char *argv[])
 {
-    // get the file name
+    // create an output file to store the completed tasks
+    FILE *fp = fopen("completed_tasks.txt", "w");
+    // allocate a memory size of 128 as inital size and then expand if needed
+    ct = (Completed_task *)calloc(QUEUE_CAPACITY, sizeof(Completed_task));
+    // get the input file name
     char *fname = argv[1];
     // allocate memory for waiting queue
     wQueue = (WaitingQueue *)malloc(sizeof(WaitingQueue));
@@ -101,6 +110,13 @@ int main(int argc, char *argv[])
     printf("all the unit threads exited.\n");
     // print a message to indicate the end of the program
     printf("the prgoram has finished %d tasks successfully !\n", total_tasks);
+    for (int i = 0; i < num_tasks; i++)
+    {
+        fprintf(fp, "task[%d] visit %d unit(s): result = {%lld}, elapsed time is {%.9f} seconds\n", ct[i].id, ct[i].unit_count, ct[i].value, ct[i].execution_time);
+    }
+    fclose(fp);
+    free(ct);
+    printf("test %d\n", capacity);
     printf("تم بحمد الله وعونه\n { قُلْ إِنَّ صَلَاتِي وَنُسُكِي وَمَحْيَايَ وَمَمَاتِي لِلَّهِ رَبِّ الْعَالَمِينَ (162) لَا شَرِيكَ لَهُ وَبِذَٰلِكَ أُمِرْتُ وَأَنَا أَوَّلُ الْمُسْلِمِينَ (163) سورة الأنعام } \n");
     // free the waiting queue
     free(wQueue);

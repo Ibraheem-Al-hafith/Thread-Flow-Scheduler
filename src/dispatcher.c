@@ -13,7 +13,7 @@ void *dispatcher(void *wq)
     // casting from void to waitingqueue
     WaitingQueue *q = (WaitingQueue *)wq;
     // let the dispatcher looping until the receptor is done and the completed tasks equal the total tasks
-    while (1)
+    while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         // 1. Pull
         Task *t = dequeue(q);

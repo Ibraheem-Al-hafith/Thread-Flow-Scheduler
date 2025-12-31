@@ -8,6 +8,8 @@
 
 // declare a mutex to avoid race conditions on completed_tasks variable
 pthread_mutex_t completed_mutex;
+// declare a mutex for the realloc
+pthread_mutex_t realloc_mutex;
 void *unit_0(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
@@ -56,6 +58,26 @@ void *unit_0(void *uq)
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_nsec - t->atime.tv_nsec) / 1e9;
             // display a message to indicate the end of the task
             printf("task[%d]: result = {%lld}, elapsed time is {%.9f} seconds\n", t->id, t->value, t->execution_time);
+            pthread_mutex_lock(&realloc_mutex);
+            if (capacity < t->id)
+            {
+                capacity *= 2;
+                Completed_task *tmp = realloc(ct, capacity * sizeof(Completed_task));
+                if (!tmp)
+                {
+                    perror("realloc failed\n");
+                }
+                ct = tmp;
+            }
+            Completed_task c0;
+            // assign the attributes of completed task to the other task object to handle output
+            c0.id = t->id;
+            c0.value = t->value;
+            c0.unit_count = t->unit_count;
+            c0.execution_time = t->execution_time;
+            ct[c0.id] = c0;
+            num_tasks++;
+            pthread_mutex_unlock(&realloc_mutex);
             pthread_mutex_lock(&completed_mutex);
             // increment completed_tasks by one
             completed_tasks++;
@@ -128,6 +150,26 @@ void *unit_1(void *uq)
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_nsec - t->atime.tv_nsec) / 1e9;
             // display a message to indicate the end of the task
             printf("task[%d]: result = {%lld}, elapsed time is {%.9f} seconds\n", t->id, t->value, t->execution_time);
+            pthread_mutex_lock(&realloc_mutex);
+            if (capacity < t->id)
+            {
+                capacity *= 2;
+                Completed_task *tmp = realloc(ct, capacity * sizeof(Completed_task));
+                if (!tmp)
+                {
+                    perror("realloc failed\n");
+                }
+                ct = tmp;
+            }
+            Completed_task c0;
+            // assign the attributes of completed task to the other task object to handle output
+            c0.id = t->id;
+            c0.value = t->value;
+            c0.unit_count = t->unit_count;
+            c0.execution_time = t->execution_time;
+            ct[c0.id] = c0;
+            num_tasks++;
+            pthread_mutex_unlock(&realloc_mutex);
             pthread_mutex_lock(&completed_mutex);
             // increment completed_tasks by one
             completed_tasks++;
@@ -212,6 +254,26 @@ void *unit_2(void *uq)
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_nsec - t->atime.tv_nsec) / 1e9;
             // display a message to indicate the end of the task
             printf("task[%d]: result = {%lld}, elapsed time is {%.9f} seconds\n", t->id, t->value, t->execution_time);
+            pthread_mutex_lock(&realloc_mutex);
+            if (capacity < t->id)
+            {
+                capacity *= 2;
+                Completed_task *tmp = realloc(ct, capacity * sizeof(Completed_task));
+                if (!tmp)
+                {
+                    perror("realloc failed\n");
+                }
+                ct = tmp;
+            }
+            Completed_task c0;
+            // assign the attributes of completed task to the other task object to handle output
+            c0.id = t->id;
+            c0.value = t->value;
+            c0.unit_count = t->unit_count;
+            c0.execution_time = t->execution_time;
+            ct[c0.id] = c0;
+            num_tasks++;
+            pthread_mutex_unlock(&realloc_mutex);
             pthread_mutex_lock(&completed_mutex);
             // increment completed_tasks by one
             completed_tasks++;
@@ -284,6 +346,26 @@ void *unit_3(void *uq)
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_nsec - t->atime.tv_nsec) / 1e9;
             // display a message to indicate the end of the task
             printf("task[%d]: result = {%lld}, elapsed time is {%.9f} seconds\n", t->id, t->value, t->execution_time);
+            pthread_mutex_lock(&realloc_mutex);
+            if (capacity < t->id)
+            {
+                capacity *= 2;
+                Completed_task *tmp = realloc(ct, capacity * sizeof(Completed_task));
+                if (!tmp)
+                {
+                    perror("realloc failed\n");
+                }
+                ct = tmp;
+            }
+            Completed_task c0;
+            // assign the attributes of completed task to the other task object to handle output
+            c0.id = t->id;
+            c0.value = t->value;
+            c0.unit_count = t->unit_count;
+            c0.execution_time = t->execution_time;
+            ct[c0.id] = c0;
+            num_tasks++;
+            pthread_mutex_unlock(&realloc_mutex);
             pthread_mutex_lock(&completed_mutex);
             // increment completed_tasks by one
             completed_tasks++;
@@ -342,6 +424,26 @@ void *unit_4(void *uq)
             t->execution_time = (t->dtime.tv_sec - t->atime.tv_sec) + (t->dtime.tv_nsec - t->atime.tv_nsec) / 1e9;
             // display a message to indicate the end of the task
             printf("task[%d]: result = {%lld}, elapsed time is {%.9f} seconds\n", t->id, t->value, t->execution_time);
+            pthread_mutex_lock(&realloc_mutex);
+            if (capacity < t->id)
+            {
+                capacity *= 2;
+                Completed_task *tmp = realloc(ct, capacity * sizeof(Completed_task));
+                if (!tmp)
+                {
+                    perror("realloc failed\n");
+                }
+                ct = tmp;
+            }
+            Completed_task c0;
+            // assign the attributes of completed task to the other task object to handle output
+            c0.id = t->id;
+            c0.value = t->value;
+            c0.unit_count = t->unit_count;
+            c0.execution_time = t->execution_time;
+            ct[c0.id] = c0;
+            num_tasks++;
+            pthread_mutex_unlock(&realloc_mutex);
             pthread_mutex_lock(&completed_mutex);
             // increment completed_tasks by one
             completed_tasks++;

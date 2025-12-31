@@ -79,6 +79,7 @@ void *receptor(void *arg)
         t->atime.tv_nsec = 0;
         // update global counters and enqueue the task
         enqueue(wQueue, t);
+        printf("task[%d] inserted\n", t->id);
         total_tasks++;
     }
     // close the file
