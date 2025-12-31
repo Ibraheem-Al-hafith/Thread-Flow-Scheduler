@@ -1,3 +1,8 @@
+/*
+    In this file, several functions are defined and used
+    for initialize the waiting queue, enqueue tasks, and dequeue tasks
+*/
+
 #include "../include/project.h"
 
 void queue_init(WaitingQueue *q)
@@ -27,6 +32,11 @@ void enqueue(WaitingQueue *q, Task *t)
         // wait for the signal
         pthread_cond_wait(&q->not_full, &q->mutex);
     }
+    /*
+        if this is the first time the task is being insert to the queue
+        we get the current time and initialize it to the task, otherwise we avoid
+        it because this is not the first time it enters the queue (has more than one unit to visit)
+    */
     if (t->atime.tv_sec == 0 && t->atime.tv_sec == 0)
     {
         /*
@@ -53,36 +63,57 @@ void enqueue(WaitingQueue *q, Task *t)
 
 Task *dequeue(WaitingQueue *q)
 {
+    // declare a Task object
     Task *t;
+    // lock the mutex to avoid changing in the same time between receptor and dispatcher
     pthread_mutex_lock(&q->mutex);
+    // check whether the program has finished
     if (receptor_done && total_tasks == completed_tasks && q->size == 0)
     {
+        // unlock the mutex and return NULL to notify the dispatcher
         pthread_mutex_unlock(&q->mutex);
         return NULL;
     }
+    // check whether the queue is empty, if so,  wait until it is filled by the receptor
     if (q->size == 0)
     {
         // printf("The waiting queue is empty ! waiting until the queue is filled with data. \n");
         pthread_cond_wait(&q->not_empty, &q->mutex);
+        /*
+            sometimes the signal is sent by one of the units to notify the end of the program
+            so we need to check again if the program has finished or not
+        */
         if (receptor_done && total_tasks == completed_tasks && q->size == 0)
         {
+            // unlock the mutex and return NULL to notify the dispatcher
             pthread_mutex_unlock(&q->mutex);
             return NULL;
         }
     }
+    // otherwise, all the task attributes is assigned from the task in the front of the waiting queue
     t = q->buffer[q->front];
+    // let the room in the front point to NULL
     q->buffer[q->front] = NULL;
+    // enable wrapping if the queue has reach its size
     q->front = (q->front + 1) % QUEUE_CAPACITY;
+    // decrement the size by one
     q->size--;
+    // signal the receptor and notify it by availability of room(s)
     pthread_cond_signal(&q->not_full);
+    // unlock the mutex
     pthread_mutex_unlock(&q->mutex);
     return t;
 }
+// declare a mutex for the dispatcher_waker
 pthread_mutex_t dispatcher_mutex;
 void dispatcher_waker()
 {
+    // lock the mutex to avoid more than one units to enter
     pthread_mutex_lock(&dispatcher_mutex);
+    // signal the dispatcher to wake up and exiting
     pthread_cond_signal(&wQueue->not_empty);
+    // unlock the waiting queue mutex to enable the dispatcher to continue
     pthread_mutex_unlock(&wQueue->mutex);
+    // unlock the mutex of this function
     pthread_mutex_unlock(&dispatcher_mutex);
 }

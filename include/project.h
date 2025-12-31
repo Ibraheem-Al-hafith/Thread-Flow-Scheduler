@@ -67,18 +67,18 @@ Task *dequeue(WaitingQueue *q);           // Extracting from the queue
 void enqueue_unit(UnitQueue *u, Task *t); // a function used by dispatcher to enqueue into unit queue
 Task *dequeue_unit(UnitQueue *u);         // a function used by the desired unit to operate on the task
 void *receptor(void *arg);                // a function used for the receptor
-// define a function to wake up the waiting threads
+// declare a function to wake up the waiting threads
 void dispatcher_waker();
-// define a boolean array to check if the units has been waked
+// declare a boolean array to check if the units has been waked
 extern bool dispatcher_status;
-// define an integer that will be used as an indicator to receptor ending
+// declare an integer that will be used as an indicator to receptor ending
 extern bool receptor_done;
-// define an integer to count the number of tasks
+// declare an integer to count the number of tasks
 extern int total_tasks;
-// define an integer to count the number of completed tasks
+// declare an integer to count the number of completed tasks
 extern int completed_tasks;
 void *dispatcher(void *q); // a function used for the dispatcher
-// define the unit functions
+// declare the unit functions
 void *unit_0(void *u);
 void *unit_1(void *u);
 void *unit_2(void *u);
@@ -87,7 +87,7 @@ void *unit_4(void *u);
 
 /*
 
-discribtion:
+discreption:
 Notice that inserting a task into queue takes the specific queue to insert on and a task to be inserted, and returns nothing
 and notice that extracting a task from the queue returns a task
 

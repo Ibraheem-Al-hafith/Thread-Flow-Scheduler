@@ -1,3 +1,7 @@
+/*
+    In this file, several functions are defined and used
+    for initialize the unit queues, enqueue tasks, and dequeue tasks
+*/
 #include "../include/project.h"
 
 void unit_queue_init(UnitQueue *u)
@@ -18,7 +22,8 @@ void unit_queue_init(UnitQueue *u)
 
 void enqueue_unit(UnitQueue *u, Task *t)
 {
-    pthread_mutex_lock(&u->mutex); // lock the mutex to avoid conflict
+    // lock the mutex to avoid problems such as changing in waiting queue in the same time between dispatcher and units
+    pthread_mutex_lock(&u->mutex);
     // check whether the queue is empty or not
     if (u->size >= UNIT_QUEUE_CAPACITY)
     {
@@ -43,28 +48,44 @@ void enqueue_unit(UnitQueue *u, Task *t)
 
 Task *dequeue_unit(UnitQueue *u)
 {
+    // declare a Task object
     Task *t;
+    // lock the mutex to avoid problems such as changing in waiting queue in the same time between dispatcher and units
     pthread_mutex_lock(&u->mutex);
+    // check whether the tasks have been proccessed
     if (receptor_done && total_tasks == completed_tasks && u->size == 0)
     {
+        // unlock the mutex and return NULL
         pthread_mutex_unlock(&u->mutex);
         return NULL;
     }
+    // check whether the queue is empty
     if (u->size == 0)
     {
         // printf("The unit queue [%d] is empty ! waiting until the queue is filled with data. \n", u->unit_id);
         pthread_cond_wait(&u->not_empty, &u->mutex);
+        /* sometimes the signal is sent from the dispatcher to indicate the finishing of all tasks
+            so we need to check again
+        */
         if (receptor_done && total_tasks == completed_tasks && u->size == 0)
         {
+            // unlock the mutex and return NULL
             pthread_mutex_unlock(&u->mutex);
             return NULL;
         }
     }
+    // otherwise, get the attributes of the task in the front
     t = u->buffer[u->front];
+    // let the dequeued task points to NULL
     u->buffer[u->front] = NULL;
+    // use mod to enable wrapping
     u->front = (u->front + 1) % UNIT_QUEUE_CAPACITY;
+    // decrement size by one
     u->size--;
+    // signal to the dispatcher if it is waiting because the queue is full
     pthread_cond_signal(&u->not_full);
+    // unlock the mutex
     pthread_mutex_unlock(&u->mutex);
+    // return the task to the desired unit
     return t;
 }

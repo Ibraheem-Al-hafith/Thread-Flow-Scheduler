@@ -1,13 +1,20 @@
+/*
+    Units:
+    Each unit recieves a pointer to its queue, then it dequeues the task in the front
+    then it makes its operation and check if there is a need to send it back to the waiting
+    queue or print a message of completing the task in question
+*/
 #include "../include/project.h"
 
-pthread_mutex_t dWaker;
+// declare a mutex to avoid race conditions on completed_tasks variable
 pthread_mutex_t completed_mutex;
 void *unit_0(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
-    while (1)
+    while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
+        // check whether the t is NULL which indicate the end of all tasks
         if (t == NULL)
         {
             break;
@@ -34,6 +41,7 @@ void *unit_0(void *uq)
         if (t->current_step < t->unit_count)
         {
             enqueue(wQueue, t); // insert the task again into the waiting queue
+            // make th thread sleep for 50,000 microseconds = 0.5 seconds
             usleep(500000);
         }
         else
@@ -52,22 +60,33 @@ void *unit_0(void *uq)
             // increment completed_tasks by one
             completed_tasks++;
             pthread_mutex_unlock(&completed_mutex);
-            usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
+            usleep(500000); // make the thread sleep for 500,000 microseconds = 0.5 seconds
         }
     }
+    /*
+        If one unit notifies that the program has executed all the tasks, it will wake
+        the dispatcher and by its turn, it will wake the uninformed units
+
+        sometimes more than one units got notified, so by using dispatcher_status
+        we can avoid losting dispatcher_waker
+    */
     if (!dispatcher_status)
     {
         dispatcher_waker();
     }
+    // print indicating message that the unit has finished its job
     printf("unit[%d] has no tasks, now it is exiting !\n", u->unit_id);
+    // exit the thread
     pthread_exit(NULL);
 }
 void *unit_1(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
+    // loop until all the tasks have been read by the receptor and completed by the units
     while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
+        // check whether the t is NULL which indicate the end of all tasks
         if (t == NULL)
         {
             break;
@@ -94,6 +113,7 @@ void *unit_1(void *uq)
         if (t->current_step < t->unit_count)
         {
             enqueue(wQueue, t); // insert the task again into the waiting queue
+            // make th thread sleep for 50,000 microseconds = 0.5 seconds
             usleep(500000);
         }
         else
@@ -112,18 +132,29 @@ void *unit_1(void *uq)
             // increment completed_tasks by one
             completed_tasks++;
             pthread_mutex_unlock(&completed_mutex);
-            usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
+            usleep(500000); // make the thread sleep for 500,000 microseconds = 0.5 seconds
         }
     }
+    /*
+        If one unit notifies that the program has executed all the tasks, it will wake
+        the dispatcher and by its turn, it will wake the uninformed units
+
+        sometimes more than one units got notified, so by using dispatcher_status
+        we can avoid losting dispatcher_waker
+    */
     if (!dispatcher_status)
     {
         dispatcher_waker();
     }
+    // print indicating message that the unit has finished its job
     printf("unit[%d] has no tasks, now it is exiting !\n", u->unit_id);
+    // exit the thread
     pthread_exit(NULL);
 }
+// declare and initialize a function that handle the power operation
 long long power(long long base, int power)
 {
+    // a container
     long long result = 1;
     for (int i = 0; i < power; i++)
     {
@@ -134,9 +165,11 @@ long long power(long long base, int power)
 void *unit_2(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
+    // loop until all the tasks have been read by the receptor and completed by the units
     while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
+        // check whether the t is NULL which indicate the end of all tasks
         if (t == NULL)
         {
             break;
@@ -164,6 +197,7 @@ void *unit_2(void *uq)
         if (t->current_step < t->unit_count)
         {
             enqueue(wQueue, t); // insert the task again into the waiting queue
+            // make th thread sleep for 50,000 microseconds = 0.5 seconds
             usleep(500000);
         }
         else
@@ -182,22 +216,33 @@ void *unit_2(void *uq)
             // increment completed_tasks by one
             completed_tasks++;
             pthread_mutex_unlock(&completed_mutex);
-            usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
+            usleep(500000); // make the thread sleep for 500,000 microseconds = 0.5 seconds
         }
     }
+    /*
+        If one unit notifies that the program has executed all the tasks, it will wake
+        the dispatcher and by its turn, it will wake the uninformed units
+
+        sometimes more than one units got notified, so by using dispatcher_status
+        we can avoid losting dispatcher_waker
+    */
     if (!dispatcher_status)
     {
         dispatcher_waker();
     }
+    // print indicating message that the unit has finished its job
     printf("unit[%d] has no tasks, now it is exiting !\n", u->unit_id);
+    // exit the thread
     pthread_exit(NULL);
 }
 void *unit_3(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
+    // loop until all the tasks have been read by the receptor and completed by the units
     while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
+        // check whether the t is NULL which indicate the end of all tasks
         if (t == NULL)
         {
             break;
@@ -224,6 +269,7 @@ void *unit_3(void *uq)
         if (t->current_step < t->unit_count)
         {
             enqueue(wQueue, t); // insert the task again into the waiting queue
+            // make th thread sleep for 50,000 microseconds = 0.5 seconds
             usleep(500000);
         }
         else
@@ -242,22 +288,33 @@ void *unit_3(void *uq)
             // increment completed_tasks by one
             completed_tasks++;
             pthread_mutex_unlock(&completed_mutex);
-            usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
+            usleep(500000); // make the thread sleep for 500,000 microseconds = 0.5 seconds
         }
     }
+    /*
+        If one unit notifies that the program has executed all the tasks, it will wake
+        the dispatcher and by its turn, it will wake the uninformed units
+
+        sometimes more than one units got notified, so by using dispatcher_status
+        we can avoid losting dispatcher_waker
+    */
     if (!dispatcher_status)
     {
         dispatcher_waker();
     }
+    // print indicating message that the unit has finished its job
     printf("unit[%d] has no tasks, now it is exiting !\n", u->unit_id);
+    // exit the thread
     pthread_exit(NULL);
 }
 void *unit_4(void *uq)
 {
     UnitQueue *u = (UnitQueue *)uq;
+    // loop until all the tasks have been read by the receptor and completed by the units
     while (!(receptor_done == true && total_tasks == completed_tasks))
     {
         Task *t = dequeue_unit(u); // fetching the task from the queue
+        // check whether the t is NULL which indicate the end of all tasks
         if (t == NULL)
         {
             break;
@@ -270,6 +327,7 @@ void *unit_4(void *uq)
         if (t->current_step < t->unit_count)
         {
             enqueue(wQueue, t); // insert the task again into the waiting queue
+            // make th thread sleep for 50,000 microseconds = 0.5 seconds
             usleep(500000);
         }
         else
@@ -288,13 +346,22 @@ void *unit_4(void *uq)
             // increment completed_tasks by one
             completed_tasks++;
             pthread_mutex_unlock(&completed_mutex);
-            usleep(500000); // make the thread sleeps for 500,000 microseconds = 0.5 seconds
+            usleep(500000); // make the thread sleep for 500,000 microseconds = 0.5 seconds
         }
     }
+    /*
+        If one unit notifies that the program has executed all the tasks, it will wake
+        the dispatcher and by its turn, it will wake the uninformed units
+
+        sometimes more than one units got notified, so by using dispatcher_status
+        we can avoid losting dispatcher_waker
+    */
     if (!dispatcher_status)
     {
         dispatcher_waker();
     }
+    // print indicating message that the unit has finished its job
     printf("unit[%d] has no tasks, now it is exiting !\n", u->unit_id);
+    // exit the thread
     pthread_exit(NULL);
 }

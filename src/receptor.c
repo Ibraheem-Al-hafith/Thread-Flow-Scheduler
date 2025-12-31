@@ -1,3 +1,8 @@
+/*
+    Receptor:
+        It reads all the tasks from a file and insert them one by one
+        into the waiting queue
+*/
 #include "../include/project.h"
 
 void *receptor(void *arg)
@@ -78,8 +83,10 @@ void *receptor(void *arg)
     }
     // close the file
     fclose(f);
-    // alter the receptor_done to 1 to indicate the end of receptor function
+    // change the receptor_done to 1 to indicate the end of receptor function
     receptor_done = true;
+    // print a message that indicate the finishing of the receptor
     printf("all the tasks have been read successfully by the receptor.\n");
+    // exit the thread
     pthread_exit(NULL);
 }
