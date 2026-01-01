@@ -108,14 +108,14 @@ int main(int argc, char *argv[])
     }
     // print indicating message that all units threads have been exited
     printf("all the unit threads exited.\n");
-    // print a message to indicate the end of the program
-    printf("the prgoram has finished %d tasks successfully !\n", total_tasks);
     for (int i = 0; i < num_tasks; i++)
     {
         fprintf(fp, "task[%d] visit %d unit(s): result = {%lld}, elapsed time is {%.9f} seconds\n", ct[i].id, ct[i].unit_count, ct[i].value, ct[i].execution_time);
     }
     fclose(fp);
     free(ct);
+    // print a message to indicate the end of the program
+    printf("the prgoram has finished %d tasks successfully !\n", total_tasks);
     printf("test %d\n", capacity);
     printf("تم بحمد الله وعونه\n { قُلْ إِنَّ صَلَاتِي وَنُسُكِي وَمَحْيَايَ وَمَمَاتِي لِلَّهِ رَبِّ الْعَالَمِينَ (162) لَا شَرِيكَ لَهُ وَبِذَٰلِكَ أُمِرْتُ وَأَنَا أَوَّلُ الْمُسْلِمِينَ (163) سورة الأنعام } \n");
     // free the waiting queue

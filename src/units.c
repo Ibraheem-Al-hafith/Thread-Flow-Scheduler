@@ -61,11 +61,16 @@ void *unit_0(void *uq)
             pthread_mutex_lock(&realloc_mutex);
             if (capacity < t->id)
             {
-                capacity *= 2;
+                while (capacity < t->id)
+                {
+                    capacity *= 2;
+                }
                 Completed_task *tmp = realloc(ct, capacity * sizeof(Completed_task));
                 if (!tmp)
                 {
+                    pthread_mutex_unlock(&realloc_mutex);
                     perror("realloc failed\n");
+                    exit(1);
                 }
                 ct = tmp;
             }
@@ -153,11 +158,16 @@ void *unit_1(void *uq)
             pthread_mutex_lock(&realloc_mutex);
             if (capacity < t->id)
             {
-                capacity *= 2;
+                while (capacity < t->id)
+                {
+                    capacity *= 2;
+                }
                 Completed_task *tmp = realloc(ct, capacity * sizeof(Completed_task));
                 if (!tmp)
                 {
+                    pthread_mutex_unlock(&realloc_mutex);
                     perror("realloc failed\n");
+                    exit(1);
                 }
                 ct = tmp;
             }
@@ -257,11 +267,16 @@ void *unit_2(void *uq)
             pthread_mutex_lock(&realloc_mutex);
             if (capacity < t->id)
             {
-                capacity *= 2;
+                while (capacity < t->id)
+                {
+                    capacity *= 2;
+                }
                 Completed_task *tmp = realloc(ct, capacity * sizeof(Completed_task));
                 if (!tmp)
                 {
+                    pthread_mutex_unlock(&realloc_mutex);
                     perror("realloc failed\n");
+                    exit(1);
                 }
                 ct = tmp;
             }
@@ -349,11 +364,16 @@ void *unit_3(void *uq)
             pthread_mutex_lock(&realloc_mutex);
             if (capacity < t->id)
             {
-                capacity *= 2;
+                while (capacity < t->id)
+                {
+                    capacity *= 2;
+                }
                 Completed_task *tmp = realloc(ct, capacity * sizeof(Completed_task));
                 if (!tmp)
                 {
+                    pthread_mutex_unlock(&realloc_mutex);
                     perror("realloc failed\n");
+                    exit(1);
                 }
                 ct = tmp;
             }
@@ -427,11 +447,16 @@ void *unit_4(void *uq)
             pthread_mutex_lock(&realloc_mutex);
             if (capacity < t->id)
             {
-                capacity *= 2;
+                while (capacity < t->id)
+                {
+                    capacity *= 2;
+                }
                 Completed_task *tmp = realloc(ct, capacity * sizeof(Completed_task));
                 if (!tmp)
                 {
+                    pthread_mutex_unlock(&realloc_mutex);
                     perror("realloc failed\n");
+                    exit(1);
                 }
                 ct = tmp;
             }
