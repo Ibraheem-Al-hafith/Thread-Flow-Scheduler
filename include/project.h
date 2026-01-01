@@ -83,6 +83,7 @@ void *unit_1(void *u);
 void *unit_2(void *u);
 void *unit_3(void *u);
 void *unit_4(void *u);
+void *units(void *u);
 // declare a function to wake up the waiting threads
 void dispatcher_waker();
 // declare a boolean array to check if the units has been waked

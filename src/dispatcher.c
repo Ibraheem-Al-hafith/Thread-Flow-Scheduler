@@ -10,6 +10,9 @@
 
 void *dispatcher(void *wq)
 {
+    struct timespec ts;
+    ts.tv_sec = 1; // 1 second
+    ts.tv_nsec = 0;
     // casting from void to waitingqueue
     WaitingQueue *q = (WaitingQueue *)wq;
     // let the dispatcher looping until the receptor is done and the completed tasks equal the total tasks
@@ -39,7 +42,7 @@ void *dispatcher(void *wq)
         // signal all the waiting unit queues
         pthread_cond_signal(&uQueue[i]->not_empty);
         // wait until all unit threads exit
-        usleep(100000);
+        nanosleep(&ts, NULL);
     }
     // print a message indicating that the dispatcher has finished
     printf("dispatcher has finished\n");

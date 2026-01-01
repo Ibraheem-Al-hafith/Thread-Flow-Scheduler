@@ -72,30 +72,13 @@ int main(int argc, char *argv[])
         exit(1);
     }
     // check whether the unit threads have been created
-    if (pthread_create(&unit_ids[0], NULL, unit_0, (void *)uQueue[0]) < 0)
+    for (int i = 0; i < UNITS_NUMBER; i++)
     {
-        printf("the unit [0] thread has not been created.\n");
-        exit(1);
-    }
-    if (pthread_create(&unit_ids[1], NULL, unit_1, (void *)uQueue[1]) < 0)
-    {
-        printf("the unit [1] thread has not been created.\n");
-        exit(1);
-    }
-    if (pthread_create(&unit_ids[2], NULL, unit_2, (void *)uQueue[2]) < 0)
-    {
-        printf("the unit [2] thread has not been created.\n");
-        exit(1);
-    }
-    if (pthread_create(&unit_ids[3], NULL, unit_3, (void *)uQueue[3]) < 0)
-    {
-        printf("the unit [3] thread has not been created.\n");
-        exit(1);
-    }
-    if (pthread_create(&unit_ids[4], NULL, unit_4, (void *)uQueue[4]) < 0)
-    {
-        printf("the unit [4] thread has not been created.\n");
-        exit(1);
+        if (pthread_create(&unit_ids[i], NULL, units, (void *)uQueue[i]) < 0)
+        {
+            printf("the unit [%d] thread has not been created.\n", i);
+            exit(1);
+        }
     }
     // make the main thread waiting for the threads
     pthread_join(receptor_id, NULL);
