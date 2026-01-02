@@ -55,7 +55,7 @@ void *receptor(void *arg)
         // assign the value to uc
         uc = atoi(tok);
         // allocate array of requested unit ids in sequence
-        // mutiply size od integer by uc
+        // multiply the size of integer by uc
         int *uids = malloc(sizeof(int) * uc);
         for (int i = 0; i < uc; ++i)
         {
@@ -69,6 +69,7 @@ void *receptor(void *arg)
                 // otherwise assign the value
                 uids[i] = atoi(tok);
         }
+        // assign the value we got to the attributes of the task object
         t->id = id;
         t->value = val;
         t->unit_count = uc;
@@ -79,7 +80,9 @@ void *receptor(void *arg)
         t->atime.tv_nsec = 0;
         // update global counters and enqueue the task
         enqueue(wQueue, t);
+        // print a message that indicate the inserting of the task
         printf("task[%d] inserted\n", t->id);
+        // increment of total tasks by one
         total_tasks++;
     }
     // close the file

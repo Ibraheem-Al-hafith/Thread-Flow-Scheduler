@@ -28,12 +28,10 @@ void enqueue_unit(UnitQueue *u, Task *t)
     if (u->size >= UNIT_QUEUE_CAPACITY)
     {
         // if so, waiting until a signal is made by the dequeue
-        // printf("The unit queue [%d]is full ! waiting until a room is available. \n", u->unit_id);
+        printf("The unit queue [%d] is full ! waiting until a room is available. \n", u->unit_id);
         // wait for the signal
         pthread_cond_wait(&u->not_full, &u->mutex);
     }
-    // print a message to indicate of inserting a task
-    // printf("a room for The unit queue [%d] is available ! entering the data .. \n", u->unit_id);
     // inserting the desired task
     u->buffer[u->rear] = t;
     // increment the rear by one
@@ -62,7 +60,6 @@ Task *dequeue_unit(UnitQueue *u)
     // check whether the queue is empty
     if (u->size == 0)
     {
-        // printf("The unit queue [%d] is empty ! waiting until the queue is filled with data. \n", u->unit_id);
         pthread_cond_wait(&u->not_empty, &u->mutex);
         /* sometimes the signal is sent from the dispatcher to indicate the finishing of all tasks
             so we need to check again

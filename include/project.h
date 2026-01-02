@@ -14,7 +14,7 @@
 #define M 10000                // The constant for modulo operations
 #define QUEUE_CAPACITY 128     // identify the waiting queue capacity
 #define UNIT_QUEUE_CAPACITY 32 // identify the unit queue capacity
-#define UNITS_NUMBER 5
+#define UNITS_NUMBER 5         // identify the units number
 
 typedef struct
 {
@@ -77,24 +77,19 @@ void enqueue_unit(UnitQueue *u, Task *t); // a function used by dispatcher to en
 Task *dequeue_unit(UnitQueue *u);         // a function used by the desired unit to operate on the task
 void *receptor(void *arg);                // a function used for the receptor
 void *dispatcher(void *q);                // a function used for the dispatcher
-// declare the unit functions
-void *unit_0(void *u);
-void *unit_1(void *u);
-void *unit_2(void *u);
-void *unit_3(void *u);
-void *unit_4(void *u);
+// declare the units function
 void *units(void *u);
 // declare a function to wake up the waiting threads
 void dispatcher_waker();
 // declare a boolean array to check if the units has been waked
 extern bool dispatcher_status;
-// declare an integer that will be used as an indicator to receptor ending
+// declare a bool variable that will be used as an indicator to receptor ending
 extern bool receptor_done;
 // declare an integer to count the number of tasks
 extern int total_tasks;
 // declare an integer to count the number of completed tasks
 extern int completed_tasks;
-// declare an rray for the completed task for the output file
+// declare an array for the completed task for the output file
 extern Completed_task *ct;
 // declare an integer for the capacity of the completed tasks array (initial capacity is 128)
 extern int capacity;

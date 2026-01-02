@@ -10,9 +10,11 @@
 
 void *dispatcher(void *wq)
 {
+    // define an object to use as a timer for the sleep of dispatcher to wait until all units exiting
     struct timespec ts;
-    ts.tv_sec = 1; // 1 second
-    ts.tv_nsec = 0;
+    // initialize it by 0 second and 1,000,000 nanoseconds
+    ts.tv_sec = 0;        // 0 second
+    ts.tv_nsec = 1000000; // 10,000,000 nanoseconds = 0.01 seconds
     // casting from void to waitingqueue
     WaitingQueue *q = (WaitingQueue *)wq;
     // let the dispatcher looping until the receptor is done and the completed tasks equal the total tasks
@@ -50,4 +52,18 @@ void *dispatcher(void *wq)
     dispatcher_status = true;
     // exit the thread
     pthread_exit(NULL);
+}
+
+// declare a mutex for the dispatcher_waker
+pthread_mutex_t dispatcher_mutex;
+void dispatcher_waker()
+{
+    // lock the mutex to avoid more than one units to enter
+    pthread_mutex_lock(&dispatcher_mutex);
+    // signal the dispatcher to wake up and exiting
+    pthread_cond_signal(&wQueue->not_empty);
+    // unlock the waiting queue mutex to enable the dispatcher to continue
+    pthread_mutex_unlock(&wQueue->mutex);
+    // unlock the mutex of this function
+    pthread_mutex_unlock(&dispatcher_mutex);
 }

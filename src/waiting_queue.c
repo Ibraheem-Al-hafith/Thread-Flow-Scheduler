@@ -77,7 +77,6 @@ Task *dequeue(WaitingQueue *q)
     // check whether the queue is empty, if so,  wait until it is filled by the receptor
     if (q->size == 0)
     {
-        // printf("The waiting queue is empty ! waiting until the queue is filled with data. \n");
         pthread_cond_wait(&q->not_empty, &q->mutex);
         /*
             sometimes the signal is sent by one of the units to notify the end of the program
@@ -103,17 +102,4 @@ Task *dequeue(WaitingQueue *q)
     // unlock the mutex
     pthread_mutex_unlock(&q->mutex);
     return t;
-}
-// declare a mutex for the dispatcher_waker
-pthread_mutex_t dispatcher_mutex;
-void dispatcher_waker()
-{
-    // lock the mutex to avoid more than one units to enter
-    pthread_mutex_lock(&dispatcher_mutex);
-    // signal the dispatcher to wake up and exiting
-    pthread_cond_signal(&wQueue->not_empty);
-    // unlock the waiting queue mutex to enable the dispatcher to continue
-    pthread_mutex_unlock(&wQueue->mutex);
-    // unlock the mutex of this function
-    pthread_mutex_unlock(&dispatcher_mutex);
 }
