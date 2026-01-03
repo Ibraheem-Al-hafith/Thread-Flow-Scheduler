@@ -149,7 +149,7 @@ make
 ## 👥 The Development Team
 
 * 🧬 **Concurrency & Sync**: Mohammed Salah Ahmed & Mosab Taha Ahmed
-* 📂 **File I/O & Receptor**: Awaab Abdelrafia Balla
+* 📂 **File I/O & Receptor**: Awaab Abdelrafia Ballah
 * 🎮 **Dispatcher & Units**: Ibrahim Alhafith Alkhair & Rashed Albasheir Suliman
 
 ---
