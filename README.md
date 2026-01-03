@@ -1,118 +1,159 @@
+# 🧵 Thread-Flow-Scheduler
+> **A High-Performance Multi-Threaded Task Execution Engine**
+
+![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20POSIX-green)
+![Language](https://img.shields.io/badge/language-C11-blue)
+
+
+**Thread-Flow-Scheduler** is a multi-threaded task execution engine developed for the University of Khartoum Operating Systems course. The system simulates a distributed processing environment where tasks are ingested from an input file, queued, and dispatched across specialized processing units (threads) according to a predefined sequence.
 
 ---
 
-# 🚀 ThreadFlow-Scheduler: Multi-Threaded Task Processor
+## 🏗 System Architecture
 
-## 🎓 Context
-
-Developed for the **Operating Systems** course at the **University of Khartoum**. This project showcases advanced concurrency, thread synchronization, and real-time task scheduling.
-
----
-
-## 📖 Project Overview
-
-This system simulates a high-performance multi-unit processing environment. Tasks are parsed from a file, entered into a global queue, and then navigated through a series of specialized worker threads (Units 0-4) based on a custom itinerary.
-
-## 🏗️ System Architecture
-
-The engine runs on three primary thread types:
-
-* 📥 **Receptor**: The gatekeeper. It reads tasks from the input file and introduces them to the **Waiting Queue**.
+The project implements a **Pipeline Architecture**. Tasks flow through various stages of processing, managed by a central dispatcher and dedicated worker threads.
 
 
-* 🚦 **Dispatcher**: The traffic controller. It monitors the queue and routes tasks to their next required processing unit.
 
-
-* ⚙️ **Processing Units**: 5 specialized worker threads (0-4) that perform unique mathematical transformations or output tasks.
-
-
+### Workflow Components:
+1.  **Receptor**: Ingests data from the input file and timestamps arrival using high-resolution timers.
+2.  **Waiting Queue**: A central thread-safe buffer for incoming tasks.
+3.  **Dispatcher**: The "Brain" of the system—routes tasks to the appropriate unit based on their current progress.
+4.  **Processing Units (0-4)**: Five specialized threads, each managing its own local queue and performing distinct mathematical operations.
 
 ---
 
-## 🛠️ Key Features
+## 🏗 System Diagram
+**The project follows a pipeline architecture designed to manage task flow through asynchronous processing units:**
 
-* 🔒 **Thread Synchronization**: Robust use of **Mutexes** and **Condition Variables** to prevent race conditions in shared queues.
-* 🔢 **Modulo Arithmetic**: Secure computation using a constant  for all unit operations.
+```text
+           +------------+      +-----------+      +---------------+
+           | Input File | ---> | Reception | ---> | Waiting Queue |<<-------------<<<<<<<<<<<<<<<<<<<<<<<<<------------------
+           +------------+      +-----------+      +-------+-------+                                                         |
+                                                          |                                                                 |
+                                                   +------v-----+                                                           |
+                                                   | Dispatcher |                                                           |
+                                                   +------+-----+                                                           |
+                                                          |                                                                 |
+          +-----------------------------------------------+-----------------------------------------------+                 |
+          |                        |                      |                        |                      |                 |
+    +-----v------+           +-----v------+         +-----v------+           +-----v------+         +-----v------+          |
+    | Unit 0 Q   |           | Unit 1 Q   |         | Unit 2 Q   |           | Unit 3 Q   |         | Unit 4 Q   |          |
+    +-----+------+           +-----+------+         +-----+------+           +-----+------+         +-----+------+          |
+          |                        |                      |                        |                      |                 |
+    +-----v------+           +-----v------+         +-----v------+           +-----v------+         +-----v------+          |
+    |   Unit 0   |           |   Unit 1   |         |   Unit 2   |           |   Unit 3   |         |   Unit 4   |          |
+    +-----+------+           +-----+------+         +-----+------+           +-----+------+         +-----+------+          |
+          |                        |                      |                        |                      |                 |
+          +------------------------+----------------------+------------------------+----------------------+                 |
+                                                          |                                                                 |
+                                                          |->---------------------->>>>>>>>>>>>>>>>>>>>>>>-------------------
+                                                          |
+                                                  +-------v-------+
+                                                  |   Completed   |
+                                                  +---------------+
+```
+---
 
+## ⚡ Processing Unit Operations
 
-* ⏱️ **Timing Logic**: High-precision task arrival tracking using `gettimeofday()`.
+Each unit simulates a 0.5s workload and applies a specific transformation. (Note: $M = 10,000$ for modulo operations).
 
+| Unit ID | Icon | Operation | Description |
+| :--- | :---: | :--- | :--- |
+| **0** | ➕ | `(value + 7) % M ` | Incremental offset |
+| **1** | ✖️ | `(value * 2) % M ` | Doubling logic |
+| **2** | ⚡ | `(value^5) % M ` | Exponential transformation |
+| **3** | ➖ | `value - 19 ` | Negative offset |
+| **4** | 📤 | `print` | Final output & Termination |
 
-* 💤 **Cooldown Simulation**: Units simulate real-world hardware constraints by sleeping for **0.5s** after each operation.
+---
 
+## 📄 Data Specifications
 
+### Task Structure
+Tasks are represented using a dynamic C structure to track their journey through the pipeline:
+
+```c
+struct task {
+    int id;            // Unique identifier
+    int value;         // Value operated on by units
+    int atime;         // Arrival timestamp
+    int unit_count;    // Total sequence length
+    int *unit_id;      // Ordered list of Unit IDs to visit
+};
+
+```
+
+### Input Format (`input.txt`)
+
+`<Task-id> <Task-Value> <units-count> <unit-id-1> <unit-id-2> ...`
+
+**Example:**
+`0 123 4 0 0 4 2` → *Task 0 starts with 123, visits Unit 0 twice, then Unit 4, then Unit 2.*
 
 ---
 
 ## 📂 Project Structure
 
-```bash
-ThreadFlow-OS/
-├── 📁 include/
-│   └── project.h       # 📜 Shared types & function headers
-├── 📁 src/
-│   ├── main.c          # 🏁 Thread init & sync logic
-│   ├── receptor.c      # 📑 File parsing logic
-│   ├── dispatcher.c    # 🎯 Task routing engine
-│   └── units.c         # 🧮 Math operations (Units 0-4)
-├── 📁 docs/
-    └── Project-All.pdf  # 📘 Course instructions [cite: 2]
-├── 🔨 Makefile         # ⚡ Automation for building
-└── 🚫 .gitignore       # 🧹 Clean repository management
+
+```text
+Thread-Flow-Scheduler/
+├── src/
+│   ├── main.c           # Thread spawning & cleanup
+│   ├── receptor.c       # File ingestion
+│   ├── dispatcher.c     # Routing logic
+│   ├── units.c          # Worker thread logic
+│   └── waitingg_queue.c # Thread-safe waiting queue (Mutex/Cond Vars)
+│   └── unit_queue.c     # Thread-safe unit queue (Mutex/Cond Vars)
+├── include/
+│   └──project.h        # Global data
+├── Makefile             # Build script
+└── input.txt            # Data file
 
 ```
 
----
-
-## ⚙️ Unit Operations Table
-
-| Unit | Operation | Description |
-| --- | --- | --- |
-| **0** | `+7 % M` | Addition & Modulo 
-| **1** | `*2 % M` | Multiplication & Modulo 
-| **2** | `^5 % M` | Power & Modulo 
-| **3** | `-19` | Subtraction 
-| **4** | `Print` | Final Result Output 
 
 ---
 
 ## 🚀 Getting Started
 
-### 📋 Prerequisites
+### Prerequisites
 
-* **GCC** compiler
-* **Pthread** library (POSIX threads)
+* **OS**: POSIX-compliant (Linux, macOS, WSL2)
+* **Compiler**: `gcc`
+* **Dependencies**: `lpthread`, `lrt`
 
-### 💻 Installation & Execution
+### Installation & Execution
 
-1. **Clone the repo:**
+1. **Clone the repository**
 ```bash
 git clone https://github.com/Ibraheem-Al-hafith/Thread-Flow-Scheduler.git
-
+cd Thread-Flow-Scheduler
 ```
-
-
-2. **Compile the engine:**
+2. **Compile the source**:
 ```bash
 make
 
 ```
 
 
-3. **Run the simulation:**
+3. **Run the scheduler**:
 ```bash
-./system_sim input_file.txt
+./scheduler_flow
 
 ```
 
+---
 
+## 👥 The Development Team
+
+* 🧬 **Concurrency & Sync**: Mohammed Salah Ahmed & Mosab Taha Ahmed
+* 📂 **File I/O & Receptor**: Awaab Abdelrafia Balla
+* 🎮 **Dispatcher & Units**: Ibrahim Alhafith Alkhair & Rashed Albasheir Suliman
 
 ---
 
-## 👥 The Team
+<h1 align="center">University of Khartoum - Faculty of Mathematical Science and Informatics</h1>
 
-* 🧬 **Member 1**: [Name] — *Concurrency & Synchronization*
-* 📂 **Member 2**: [Name] — *File I/O & Receptor Logic*
-* 🎮 **Member 3**: [Name] — *Dispatcher & Unit Operations*
 
----
