@@ -1,9 +1,15 @@
+<div align="center">
+
 # 🧵 Thread-Flow-Scheduler
-> **A High-Performance Multi-Threaded Task Execution Engine**
+>##  **A High-Performance Multi-Threaded Task Execution Engine**
 
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20POSIX-green)
 ![Language](https://img.shields.io/badge/language-C11-blue)
 
+<img src="./assets/header.png" width="50%" height="50%" style="border-radius:10%">
+
+</div>
+---
 
 **Thread-Flow-Scheduler** is a multi-threaded task execution engine developed for the University of Khartoum Operating Systems course. The system simulates a distributed processing environment where tasks are ingested from an input file, queued, and dispatched across specialized processing units (threads) according to a predefined sequence.
 
